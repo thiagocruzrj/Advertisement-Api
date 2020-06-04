@@ -18,8 +18,9 @@ namespace Deploy_GitHub_Actions_Azure.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult Index([FromService]IConfiguration config)
         {
+            ViewBag.Environment = config["Ambiente"];
             return View();
         }
 
