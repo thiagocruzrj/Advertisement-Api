@@ -8,4 +8,9 @@
     <Folder Include="Views\Accounts\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Amazon.AspNetCore.Identity.Cognito" Version="1.0.5" />
+    <PackageReference Include="Amazon.Extensions.CognitoAuthentication" Version="1.0.4" />
+  </ItemGroup>
+
 </Project>
