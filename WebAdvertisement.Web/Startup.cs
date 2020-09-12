@@ -18,6 +18,19 @@ namespace WebAdvertisement.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            services.AddCognitoIdentity(c =>
+            {
+                c.Password = new Microsoft.AspNetCore.Identity.PasswordOptions
+                {
+                    RequireDigit = false,
+                    RequiredLength = 6,
+                    RequiredUniqueChars = 0,
+                    RequireLowercase = false,
+                    RequireNonAlphanumeric = false,
+                    RequireUppercase = false
+                };
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
