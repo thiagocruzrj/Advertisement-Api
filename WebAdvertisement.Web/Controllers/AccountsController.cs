@@ -1,4 +1,5 @@
-﻿using Amazon.Extensions.CognitoAuthentication;
+﻿using Amazon.AspNetCore.Identity.Cognito;
+using Amazon.Extensions.CognitoAuthentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -21,12 +22,30 @@ namespace WebAdvertisement.Web.Controllers
 
         public async Task<IActionResult> Signup()
         {
-            return View();
+            var model = new SignupViewModel();
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Signup(SignupViewModel signup)
+        public async Task<IActionResult> Signup(SignupViewModel model)
         {
+            if(ModelState.IsValid)
+            {
+                var user = _pool.GetUser(model.Email);
+                if(user.Status != null)
+                {
+                    ModelState.AddModelError("UserExist", "There an user with this email created");
+                    return View(model);
+                }
+
+                user.Attributes.Add(CognitoAttribute.Name.ToString(), model.Email);
+                var createdUser = await _userManager.CreateAsync(user, model.Password);
+
+                if(createdUser.Succeeded)
+                {
+                    RedirectToAction("Confirm");
+                }
+            }
             return View();
         }
     }
